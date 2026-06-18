@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../services/api';
+import { getProductImageUrl } from '../services/imageHelper';
 import VisitCounter from '../components/VisitCounter';
 import WhatsappFloatBtn from '../components/WhatsappFloatBtn';
 
@@ -73,7 +74,7 @@ export default function Catalog({ onNavigate }) {
       <header className="nes-container is-dark is-rounded retro-header">
         <div className="header-logo">
           <img 
-            src="https://wawvqqoqyukztnjireyr.supabase.co/storage/v1/object/public/logos/retro_logo.png" 
+            src="/retro_logo.png" 
             alt="Logo" 
             className="pixel-art-img" 
           />
@@ -183,7 +184,7 @@ export default function Catalog({ onNavigate }) {
                     </h3>
                     <div className="product-img-container">
                       <img 
-                        src={product.imagen_url || "https://wawvqqoqyukztnjireyr.supabase.co/storage/v1/object/public/logos/retro_logo.png"} 
+                        src={getProductImageUrl(product.imagen_url)} 
                         alt={product.nombre} 
                         className="product-img pixel-art-img" 
                       />

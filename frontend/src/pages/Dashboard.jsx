@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../services/api';
+import { getProductImageUrl } from '../services/imageHelper';
 
 const DEFAULT_LOGOS = [
-  { name: 'Netflix Premium', url: 'https://wawvqqoqyukztnjireyr.supabase.co/storage/v1/object/public/logos/netflix_pixel.png' },
-  { name: 'HBO Max Retro', url: 'https://wawvqqoqyukztnjireyr.supabase.co/storage/v1/object/public/logos/hbo_max_pixel.png' },
-  { name: 'Disney+ Pixel', url: 'https://wawvqqoqyukztnjireyr.supabase.co/storage/v1/object/public/logos/disney_pixel.png' },
-  { name: 'StreamingS Default', url: 'https://wawvqqoqyukztnjireyr.supabase.co/storage/v1/object/public/logos/retro_logo.png' }
+  { name: 'Netflix Premium', url: '/netflix_pixel.png' },
+  { name: 'HBO Max Retro', url: '/hbo_max_pixel.png' },
+  { name: 'Disney+ Pixel', url: '/disney_pixel.png' },
+  { name: 'StreamingS Default', url: '/retro_logo.png' }
 ];
 
 export default function Dashboard({ token, onLogout, onNavigate }) {
@@ -153,7 +154,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
       <header className="nes-container is-dark is-rounded retro-header">
         <div className="header-logo">
           <img 
-            src="https://wawvqqoqyukztnjireyr.supabase.co/storage/v1/object/public/logos/retro_logo.png" 
+            src="/retro_logo.png" 
             alt="Logo" 
             className="pixel-art-img" 
           />
@@ -236,7 +237,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
                       <tr key={product.id}>
                         <td>
                           <img 
-                            src={product.imagen_url || DEFAULT_LOGOS[3].url} 
+                            src={getProductImageUrl(product.imagen_url)} 
                             className="pixel-art-img" 
                             alt="Logo" 
                             width="40" 

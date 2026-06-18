@@ -44,7 +44,7 @@ export default function Login({ onNavigate, onLoginSuccess }) {
       <header className="nes-container is-dark is-rounded retro-header">
         <div className="header-logo">
           <img 
-            src="https://wawvqqoqyukztnjireyr.supabase.co/storage/v1/object/public/logos/retro_logo.png" 
+            src="/retro_logo.png" 
             alt="Logo" 
             className="pixel-art-img" 
           />
