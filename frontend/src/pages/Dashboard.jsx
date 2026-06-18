@@ -442,18 +442,30 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
                     )}
                   </div>
                 </div>
-
-                <div className="nes-field">
-                  <label htmlFor="prod_img_url">O PEGAR URL DE IMAGEN PERSONALIZADA:</label>
-                  <input 
-                    type="url" 
-                    id="prod_img_url" 
-                    className="nes-input is-dark"
-                    value={imagenUrl}
-                    onChange={(e) => setImagenUrl(e.target.value)}
-                    placeholder="https://..."
-                  />
-                </div>
+                {/* Vista previa de imagen personalizada subida */}
+                {imagenUrl && !DEFAULT_LOGOS.some(logo => logo.url === imagenUrl) && (
+                  <div style={{ marginTop: '15px', display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <span style={{ fontSize: '10px', color: '#f7d51d' }}>VISTA PREVIA DE FOTO SUBIDA:</span>
+                    <div style={{
+                      padding: '5px',
+                      border: '4px solid #f7d51d',
+                      backgroundColor: '#121214',
+                      borderRadius: '4px',
+                      width: '60px',
+                      height: '60px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <img 
+                        src={getProductImageUrl(imagenUrl)} 
+                        alt="Vista previa" 
+                        className="pixel-art-img" 
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Disponibilidad */}
