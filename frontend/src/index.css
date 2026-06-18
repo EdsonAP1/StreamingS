@@ -511,3 +511,26 @@ body {
     transform: translateY(-4px) rotate(0deg);
   }
 }
+
+/* Custom Dark Theme for NES.css Balloons */
+.nes-balloon {
+  background-color: #1a1a1e !important;
+  color: #ffffff !important;
+  border: 4px solid #ffffff !important;
+}
+
+/* Triángulo para globos "from-left" */
+.nes-balloon.from-left::before {
+  border-right-color: #ffffff !important;
+}
+.nes-balloon.from-left::after {
+  background-color: #1a1a1e !important;
+}
+
+/* Triángulo para globos "from-right" */
+.nes-balloon.from-right::before {
+  border-left-color: #ffffff !important;
+}
+.nes-balloon.from-right::after {
+  background-color: #1a1a1e !important;
+}
