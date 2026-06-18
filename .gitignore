@@ -1,0 +1,28 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+ENV/
+build/
+dist/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables (sensitive data)
+.env
+
+# Local data files (handled on Render volume or local cache)
+app/visitas.txt
+app/whatsapp_group.txt
+
+# Editor / IDE configuration files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

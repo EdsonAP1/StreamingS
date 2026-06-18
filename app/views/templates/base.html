@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}StreamingS - Catálogo Retro 8-Bits{% endblock %}</title>
+    <!-- Google Font: Press Start 2P -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- NES.css Framework -->
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/retro_logo.png') }}" type="image/x-icon">
+</head>
+<body>
+    <!-- Fondo Animado de Cascada Digital Neon (Retro-Futurista) -->
+    <div class="stars-container">
+        <div class="trail t-1"></div>
+        <div class="trail t-2"></div>
+        <div class="trail t-3"></div>
+        <div class="trail t-4"></div>
+        <div class="trail t-5"></div>
+        <div class="trail t-6"></div>
+        <div class="trail t-7"></div>
+        <div class="trail t-8"></div>
+        <div class="trail t-9"></div>
+        <div class="trail t-10"></div>
+        <div class="trail t-11"></div>
+        <div class="trail t-12"></div>
+        <div class="trail t-13"></div>
+        
+        <div class="float-box fb-1"></div>
+        <div class="float-box fb-2"></div>
+        <div class="float-box fb-3"></div>
+        <div class="float-box fb-4"></div>
+    </div>
+
+    <div id="app-container">
+        <!-- Header -->
+        <header class="retro-header nes-container is-dark is-rounded">
+            <!-- El logo y nombre del sitio ahora actúan como el enlace de acceso secreto -->
+            <a href="{{ url_for('admin.login') }}" class="header-logo" style="text-decoration: none; color: inherit;">
+                <img src="{{ url_for('static', filename='img/retro_logo.png') }}" class="pixel-art-img" alt="StreamingS Logo">
+                <span class="brand-name">StreamingS</span>
+            </a>
+            <nav class="retro-nav">
+                <a href="{{ url_for('public.catalog') }}" class="nes-btn is-primary">Catálogo</a>
+                {% if session.get('logged_in') %}
+                    <a href="{{ url_for('admin.dashboard') }}" class="nes-btn is-warning">Admin</a>
+                    <a href="{{ url_for('admin.logout') }}" class="nes-btn is-error">Salir</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <!-- Flash Messages -->
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="nes-balloon from-right msg-{{ category }} is-dark">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="retro-footer nes-container is-dark is-rounded">
+            <p>&copy; 2026 <span class="blink-green">StreamingS</span>. Todos los derechos reservados.</p>
+            <p>Hecho con <i class="nes-icon heart is-small"></i> en 8-bits.</p>
+        </footer>
+    </div>
+</body>
+</html>
