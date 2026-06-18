@@ -27,6 +27,28 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
   const [categoria, setCategoria] = useState('');
   const [imagenUrl, setImagenUrl] = useState('');
   const [disponible, setDisponible] = useState(true);
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    setUploading(true);
+    try {
+      const response = await apiService.uploadImage(file, token);
+      if (response && response.success) {
+        setImagenUrl(response.url);
+        showFlash('Imagen subida exitosamente a Supabase Storage.', 'success');
+      } else {
+        showFlash(response.message || 'Error al subir la imagen.', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      showFlash('Error de conexión al subir el archivo.', 'error');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   useEffect(() => {
     loadDashboardData();
@@ -390,6 +412,35 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
                       />
                     </div>
                   ))}
+                </div>
+
+                {/* Subir imagen a Supabase Storage */}
+                <div className="form-group" style={{ marginBottom: '20px' }}>
+                  <label htmlFor="prod_file" style={{ fontSize: '10px', display: 'block', marginBottom: '10px' }}>
+                    O SUBIR FOTO DEL PRODUCTO:
+                  </label>
+                  <input 
+                    type="file" 
+                    id="prod_file" 
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    style={{ display: 'none' }}
+                  />
+                  <div style={{ display: 'flex', gap: '15px' }}>
+                    <button 
+                      type="button" 
+                      onClick={() => document.getElementById('prod_file').click()} 
+                      className="nes-btn is-primary"
+                      disabled={uploading}
+                    >
+                      {uploading ? 'SUBIENDO...' : 'SELECCIONAR FOTO'}
+                    </button>
+                    {uploading && (
+                      <span className="blink-green" style={{ fontSize: '8px', alignSelf: 'center' }}>
+                        CARGANDO IMAGEN EN NUBE...
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="nes-field">

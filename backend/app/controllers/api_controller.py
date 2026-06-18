@@ -1,8 +1,10 @@
 import os
+import uuid
 from flask import Blueprint, request, jsonify, current_app
 from functools import wraps
 from app.models.product_model import ProductModel
 from app.models.auth_model import AuthModel
+from app import supabase
 
 api_bp = Blueprint('api', __name__)
 
@@ -202,3 +204,49 @@ def update_whatsapp_group():
         return jsonify({'success': True, 'link': link, 'message': 'Link de WhatsApp actualizado exitosamente.'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'Error al guardar el enlace: {str(e)}'}), 500
+
+# ----------------- ENDPOINT DE SUBIDA DE IMÁGENES -----------------
+
+@api_bp.route('/upload', methods=['POST'])
+@token_required
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({'message': 'No se envió ningún archivo.'}), 400
+        
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'message': 'Nombre de archivo vacío.'}), 400
+        
+    if supabase is None:
+        return jsonify({'message': 'Supabase no está configurado en el servidor.'}), 500
+
+    try:
+        # Obtener la extensión del archivo
+        _, ext = os.path.splitext(file.filename)
+        # Generar un nombre único para evitar colisiones
+        unique_filename = f"prod_{uuid.uuid4().hex}{ext}"
+        
+        # Leer los bytes del archivo
+        file_bytes = file.read()
+        
+        # Subir a Supabase Storage en el bucket 'productos'
+        bucket_name = 'productos'
+        
+        # Guardar en Supabase Storage
+        supabase.storage.from_(bucket_name).upload(
+            path=unique_filename,
+            file=file_bytes,
+            file_options={"content-type": file.content_type}
+        )
+        
+        # Obtener la URL pública del archivo
+        public_url = supabase.storage.from_(bucket_name).get_public_url(unique_filename)
+        
+        return jsonify({
+            'success': True,
+            'url': public_url,
+            'filename': unique_filename
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'message': f'Error al subir archivo a Supabase Storage: {str(e)}'}), 500

@@ -85,5 +85,19 @@ export const apiService = {
       body: JSON.stringify({ link }),
     });
     return response.json();
+  },
+
+  async uploadImage(file, token) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await fetch(`${API_URL}/api/upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData,
+    });
+    return response.json();
   }
 };

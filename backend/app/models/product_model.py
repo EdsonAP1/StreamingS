@@ -140,6 +140,10 @@ class ProductModel:
                     return p
             return None
         try:
+            # Obtener el producto actual para verificar si cambia su imagen
+            old_product = ProductModel.get_by_id(product_id)
+            old_image_url = old_product.get('imagen_url') if old_product else None
+
             data = {
                 'nombre': nombre,
                 'descripcion': descripcion,
@@ -149,6 +153,11 @@ class ProductModel:
                 'disponible': disponible
             }
             response = supabase.table('productos').update(data).eq('id', product_id).execute()
+            
+            # Si se actualizó con éxito y la imagen cambió, borrar la anterior del storage
+            if response.data and old_image_url and old_image_url != data['imagen_url']:
+                _delete_image_from_storage(old_image_url)
+
             return response.data[0] if response.data else None
         except Exception as e:
             print(f"[Supabase update Error] Usando datos mock: {e}")
@@ -178,7 +187,16 @@ class ProductModel:
                     return True
             return False
         try:
+            # Obtener el producto antes de eliminarlo para saber qué imagen borrar
+            product = ProductModel.get_by_id(product_id)
+            image_url = product.get('imagen_url') if product else None
+
             response = supabase.table('productos').delete().eq('id', product_id).execute()
+            
+            # Si se eliminó correctamente, borrar la imagen del storage
+            if response.data and image_url:
+                _delete_image_from_storage(image_url)
+
             return response.data
         except Exception as e:
             print(f"[Supabase delete Error] Usando datos mock: {e}")
@@ -187,3 +205,26 @@ class ProductModel:
                     del _mock_products[idx]
                     return True
             return False
+
+# ----------------- FUNCIÓN AUXILIAR DE ELIMINACIÓN DE STORAGE -----------------
+
+def _delete_image_from_storage(imagen_url):
+    """Elimina la imagen del storage de Supabase si corresponde al bucket 'productos'."""
+    if not imagen_url or supabase is None:
+        return
+    
+    # Comprobar si la imagen pertenece a nuestro bucket de productos
+    if '/storage/v1/object/public/productos/' in imagen_url:
+        try:
+            # Extraer el nombre del archivo al final de la URL y limpiar parámetros
+            filename = imagen_url.split('/')[-1]
+            if filename:
+                if '?' in filename:
+                    filename = filename.split('?')[0]
+                if '#' in filename:
+                    filename = filename.split('#')[0]
+                
+                supabase.storage.from_('productos').remove([filename])
+                print(f"[Supabase Storage] Imagen eliminada con éxito: {filename}")
+        except Exception as e:
+            print(f"[Supabase Storage] Error al eliminar imagen {imagen_url}: {e}")
