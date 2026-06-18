@@ -72,7 +72,11 @@ export default function Catalog({ onNavigate }) {
 
       {/* Retro Header */}
       <header className="nes-container is-dark is-rounded retro-header">
-        <div className="header-logo">
+        <div 
+          className="header-logo" 
+          onClick={() => onNavigate('login')}
+          style={{ cursor: 'pointer' }}
+        >
           <img 
             src="/retro_logo.png" 
             alt="Logo" 
@@ -80,11 +84,6 @@ export default function Catalog({ onNavigate }) {
           />
           <h1 className="brand-name">StreamingS</h1>
         </div>
-        <nav className="retro-nav">
-          <button onClick={() => onNavigate('login')} className="nes-btn is-primary">
-            ADMINISTRAR
-          </button>
-        </nav>
       </header>
 
       <main className="main-content">
