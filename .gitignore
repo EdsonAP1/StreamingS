@@ -1,24 +1,33 @@
+# Python compilation files
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+
 # Python virtual environment
-venv/
-.venv/
-env/
-ENV/
-build/
-dist/
+**/venv/
+**/.venv/
+**/env/
+**/ENV/
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Node.js dependencies
+**/node_modules/
+**/dist/
+**/.vite/
 
-# Environment variables (sensitive data)
-.env
+# Environment files (secrets)
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
 
-# Local data files (handled on Render volume or local cache)
-app/visitas.txt
-app/whatsapp_group.txt
+# Local data files (dynamic state in Render volume)
+backend/visitas.txt
+backend/whatsapp_group.txt
+backend/app/visitas.txt
+backend/app/whatsapp_group.txt
 
-# Editor / IDE configuration files
+# Editor / IDE settings
 .vscode/
 .idea/
 *.suo
