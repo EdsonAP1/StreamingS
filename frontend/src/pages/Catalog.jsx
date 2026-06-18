@@ -40,11 +40,10 @@ export default function Catalog({ onNavigate }) {
     loadData();
   }, []);
 
-  const handleBuy = (product) => {
+  const getWaLink = (product) => {
     const phone = whatsappConfig.phone || '59175892296';
     const message = `Hola. Me interesa adquirir una cuenta de *${product.nombre}* por 30 dias al precio de *${product.precio} Bs.*. Me podria indicar los pasos para realizar el pago y recibir los accesos?`;
-    const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank');
+    return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
   };
 
   return (
@@ -195,12 +194,14 @@ export default function Catalog({ onNavigate }) {
                         [30 DIAS DE VIGENCIA]
                       </span>
                     </div>
-                    <button 
-                      onClick={() => handleBuy(product)} 
+                    <a 
+                      href={getWaLink(product)} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
                       className="nes-btn is-success product-buy-btn"
                     >
                       COMPRAR
-                    </button>
+                    </a>
                   </div>
                 </div>
               ))}
